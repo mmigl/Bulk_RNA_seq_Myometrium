@@ -190,21 +190,18 @@ entrez_ids_background <- bitr(background_genes, fromType = "SYMBOL", toType = "E
 entrez_ids_background
 entrez_ids_de <- bitr(significant_genes, fromType = "SYMBOL", toType = "ENTREZID", OrgDb = org.Hs.eg.db)
 entrez_ids_de$ENTREZID
+
 m_df <- msigdbr(species = "Homo sapiens")
 
-m_t2g <- msigdbr(species = "Homo sapiens", category = "H") %>% 
+h_database <- msigdbr(species = "Homo sapiens", category = "H") %>% 
   dplyr::select(gs_name, entrez_gene)
-m_t2g
-table(m_t2g$gs_name)
+h_database
+table(h_database$gs_name)
 
-em <- enricher(entrez_ids_de$ENTREZID, TERM2GENE=m_t2g, 
+ora_h <- enricher(entrez_ids_de$ENTREZID, TERM2GENE=m_t2g, 
                universe = entrez_ids_background$ENTREZID)
-em_1
-
-em_1 = enricher(entrez_ids_de$ENTREZID, TERM2GENE=C6, 
-                universe = entrez_ids_background$ENTREZID)
-
-barplot(em_1)
+ora_h
+barplot(ora_h)
 
 ego <- enrichGO(gene = entrez_ids_de$ENTREZID, 
                 universe = entrez_ids_background$ENTREZID,
@@ -256,5 +253,3 @@ p2 <- gseaplot(gsea_h, geneSetID = "HALLMARK_E2F_TARGETS",
                by = "runningScore", title = "HALLMARK_E2F_TARGETS")
 p1/p2
 dotplot(gsea_h)
-
-res
